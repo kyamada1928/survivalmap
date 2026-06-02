@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import CategoryFilter from "./CategoryFilter";
+import MapView from "./MapView";
+import ReportForm from "./ReportForm";
 import SpotForm from "./SpotForm";
 import SpotList from "./SpotList";
 import BottomSheet from "./BottomSheet";
 import spotsData from "../data/spots.json";
+import { getTranslator, type Locale } from "../utils/i18n";
+import { fetchApprovedRemoteSpots, isSupabaseConfigured, syncLocalChanges } from "../utils/supabaseSync";
+import type { SpotReport } from "../types/report";
 import type { Spot } from "../types/spot";
-
-const center: [number, number] = [34.702485, 135.495951];
 
 const categories = [
   "Toilet",
@@ -21,16 +21,6 @@ const categories = [
   "Smoking area",
   "Station exit",
 ];
-
-const defaultIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
 
 function getDistance(origin: { lat: number; lng: number }, target: { lat: number; lng: number }) {
   const toRad = (value: number) => (value * Math.PI) / 180;
@@ -44,12 +34,60 @@ function getDistance(origin: { lat: number; lng: number }, target: { lat: number
 }
 
 export default function MapApp() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("Toilet");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [geoState, setGeoState] = useState<"idle" | "pending" | "granted" | "denied">("idle");
-  const [userSpots, setUserSpots] = useState<Spot[]>([]);
+  const [isOnline, setIsOnline] = useState(true);
+  const [locale, setLocale] = useState<Locale>(() => {
+    if (typeof window === "undefined") {
+      return "en";
+    }
+
+    return window.localStorage.getItem("umeda-locale") === "ja" ? "ja" : "en";
+  });
+  const [userSpots, setUserSpots] = useState<Spot[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    const saved = window.localStorage.getItem("umeda-user-spots");
+    if (!saved) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [];
+    }
+  });
+  const [reports, setReports] = useState<SpotReport[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    const saved = window.localStorage.getItem("umeda-spot-reports");
+    if (!saved) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [];
+    }
+  });
+  const [remoteSpots, setRemoteSpots] = useState<Spot[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingSpot, setEditingSpot] = useState<Spot | null>(null);
+  const [reportingSpot, setReportingSpot] = useState<Spot | null>(null);
+  const [reportSaved, setReportSaved] = useState(false);
+  const [syncState, setSyncState] = useState<"local" | "ready" | "syncing" | "error">(
+    isSupabaseConfigured() ? "ready" : "local"
+  );
+
+  const t = useMemo(() => getTranslator(locale), [locale]);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -75,23 +113,102 @@ export default function MapApp() {
   }, []);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("umeda-user-spots");
-    if (saved) {
-      try {
-        setUserSpots(JSON.parse(saved));
-      } catch {
-        setUserSpots([]);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     window.localStorage.setItem("umeda-user-spots", JSON.stringify(userSpots));
   }, [userSpots]);
 
+  useEffect(() => {
+    window.localStorage.setItem("umeda-spot-reports", JSON.stringify(reports));
+  }, [reports]);
+
+  useEffect(() => {
+    window.localStorage.setItem("umeda-locale", locale);
+    document.documentElement.lang = locale;
+  }, [locale]);
+
+  useEffect(() => {
+    setIsOnline(navigator.onLine);
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isOnline || !isSupabaseConfigured()) {
+      setSyncState(isSupabaseConfigured() ? "ready" : "local");
+      return;
+    }
+
+    let cancelled = false;
+    setSyncState("syncing");
+
+    syncLocalChanges({ userSpots, reports }).then((result) => {
+      if (cancelled) {
+        return;
+      }
+
+      if (result.error) {
+        setSyncState("error");
+        return;
+      }
+
+      if (result.syncedReports.length > 0) {
+        setReports((current) =>
+          current.map((report) =>
+            result.syncedReports.includes(report.id) ? { ...report, synced: true } : report
+          )
+        );
+      }
+
+      setSyncState(result.enabled ? "ready" : "local");
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isOnline, reports, userSpots]);
+
+  useEffect(() => {
+    if (!isOnline || !isSupabaseConfigured()) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadRemoteSpots = () => {
+      fetchApprovedRemoteSpots()
+        .then((spots) => {
+          if (!cancelled) {
+            setRemoteSpots(spots);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setSyncState("error");
+          }
+        });
+    };
+
+    loadRemoteSpots();
+    const intervalId = window.setInterval(loadRemoteSpots, 30000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, [isOnline]);
+
   const allSpots = useMemo(() => {
-    return [...spotsData, ...userSpots];
-  }, [userSpots]);
+    const localIds = new Set(userSpots.map((spot) => spot.id));
+    const visibleRemoteSpots = remoteSpots.filter((spot) => !localIds.has(spot.id));
+    return [...userSpots, ...visibleRemoteSpots, ...spotsData];
+  }, [remoteSpots, userSpots]);
 
   const filteredSpots = useMemo(() => {
     return allSpots.filter((spot) => !selectedCategory || spot.category === selectedCategory);
@@ -117,87 +234,146 @@ export default function MapApp() {
 
   const headerText =
     geoState === "pending"
-      ? "Finding your location..."
+      ? t("findingLocation")
       : geoState === "granted"
-      ? "Location enabled. Showing nearby spots."
-      : "Location denied or unavailable. Showing Umeda center.";
+      ? t("locationEnabled")
+      : t("locationDenied");
+
+  const syncText =
+    syncState === "syncing"
+      ? t("syncing")
+      : syncState === "ready"
+      ? t("supabaseReady")
+      : isOnline
+      ? t("localOnly")
+      : t("queuedOffline");
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="mx-auto max-w-2xl px-4 pb-24 pt-6 sm:px-6">
-        <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between gap-3">
+      <div className="mx-auto max-w-2xl px-4 pb-24 pt-4 sm:px-6">
+        <div>
+          <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Japan Survival Map</p>
-              <h1 className="mt-2 text-2xl font-semibold">Umeda Essentials</h1>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">{t("appEyebrow")}</p>
+              <h1 className="mt-1 text-2xl font-semibold">{t("appTitle")}</h1>
+              <p className="mt-2 text-sm text-slate-500">{headerText}</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 px-3 py-2 text-sm text-slate-700">Mobile web PWA</div>
+            <div className="flex flex-col items-end gap-2">
+              <label className="text-xs text-slate-500">
+                {t("language")}
+                <select
+                  value={locale}
+                  onChange={(event) => setLocale(event.target.value as Locale)}
+                  className="ml-2 rounded-full border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700"
+                  aria-label={t("language")}
+                >
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                </select>
+              </label>
+            </div>
           </div>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="rounded-2xl bg-slate-100 p-3 text-sm text-slate-600">{headerText}</p>
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="flex min-w-0 flex-wrap gap-2 text-xs text-slate-600">
+              <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">{t("offlineReady")}</span>
+              <span className="rounded-full bg-white px-3 py-1 shadow-sm">{isOnline ? t("online") : t("queuedOffline")}</span>
+              <span className="rounded-full bg-white px-3 py-1 shadow-sm">{syncText}</span>
+            </div>
             <button
               type="button"
               data-testid="open-spot-form-button"
-              onClick={() => setShowForm(true)}
+              onClick={() => {
+                setEditingSpot(null);
+                setShowForm(true);
+              }}
               className="inline-flex items-center justify-center rounded-3xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-900"
             >
-              Add new spot
+              {t("addNewSpot")}
             </button>
           </div>
           <CategoryFilter
             categories={categories}
             selectedCategory={selectedCategory}
             onChange={setSelectedCategory}
+            t={t}
           />
           <SpotForm
             open={showForm}
-            onClose={() => setShowForm(false)}
-            onSubmit={(spot) => {
-              const id = `user-${Date.now()}`;
-              setUserSpots((current) => [...current, { ...spot, id }]);
+            onClose={() => {
               setShowForm(false);
+              setEditingSpot(null);
+            }}
+            onSubmit={(spot) => {
+              if (editingSpot && editingSpot.id.startsWith("user-")) {
+                setUserSpots((current) => {
+                  const updated = current.map((s) =>
+                    s.id === editingSpot.id ? { ...spot, id: editingSpot.id } : s
+                  );
+                  window.localStorage.setItem("umeda-user-spots", JSON.stringify(updated));
+                  return updated;
+                });
+                setSelectedSpot((prev) => (prev?.id === editingSpot.id ? { ...spot, id: editingSpot.id } : prev));
+              } else {
+                const id = `user-${Date.now()}`;
+                const newSpot = { ...spot, id };
+                setUserSpots((current) => {
+                  const updated = [...current, newSpot];
+                  window.localStorage.setItem("umeda-user-spots", JSON.stringify(updated));
+                  return updated;
+                });
+                setSelectedSpot(newSpot);
+              }
+              setShowForm(false);
+              setEditingSpot(null);
               setSelectedCategory(spot.category);
-              setSelectedSpot({ ...spot, id });
             }}
             defaultPosition={position}
+            editingSpot={editingSpot}
+            t={t}
           />
-          <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-slate-200 shadow-sm">
-            <MapContainer
-              center={position ? [position.lat, position.lng] : center}
-              zoom={16}
-              scrollWheelZoom={false}
-              className="h-[44vh] w-full"
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {position && (
-                <Marker position={[position.lat, position.lng]} icon={defaultIcon}>
-                  <Popup>You are here</Popup>
-                </Marker>
-              )}
-              {filteredSpots.map((spot) => (
-                <Marker
-                  key={spot.id}
-                  position={[spot.lat, spot.lng]}
-                  icon={defaultIcon}
-                  eventHandlers={{ click: () => setSelectedSpot(spot) }}
-                >
-                  <Popup>
-                    <div>
-                      <strong>{spot.name}</strong>
-                      <p className="text-sm">{spot.category}</p>
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
+          <ReportForm
+            open={reportingSpot != null}
+            spot={reportingSpot}
+            t={t}
+            onClose={() => setReportingSpot(null)}
+            onSubmit={(report) => {
+              setReports((current) => [...current, report]);
+              setReportSaved(true);
+              setReportingSpot(null);
+              window.setTimeout(() => setReportSaved(false), 3000);
+            }}
+          />
+          {reportSaved && (
+            <p className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm text-emerald-700" role="status">
+              {t("reportSubmitted")}
+            </p>
+          )}
+          <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <MapView spots={filteredSpots} position={position} onViewMore={setSelectedSpot} t={t} />
           </div>
-          <SpotList spots={sortedSpots} position={position} onSelect={setSelectedSpot} />
+          <SpotList spots={sortedSpots} position={position} onSelect={setSelectedSpot} t={t} />
         </div>
       </div>
-      <BottomSheet spot={selectedSpot} onClose={() => setSelectedSpot(null)} position={position} />
+      <BottomSheet
+        spot={selectedSpot}
+        onClose={() => setSelectedSpot(null)}
+        position={position}
+        isUserSpot={selectedSpot?.id.startsWith("user-")}
+        onEdit={(spot) => {
+          setEditingSpot(spot);
+          setShowForm(true);
+          setSelectedSpot(null);
+        }}
+        onDelete={(spotId) => {
+          setUserSpots((current) => {
+            const updated = current.filter((s) => s.id !== spotId);
+            window.localStorage.setItem("umeda-user-spots", JSON.stringify(updated));
+            return updated;
+          });
+        }}
+        onReport={(spot) => setReportingSpot(spot)}
+        t={t}
+      />
     </main>
   );
 }

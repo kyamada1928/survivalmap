@@ -8,6 +8,8 @@ export type Spot = {
   hours: string;
   payment: string;
   insideStation: boolean;
+  verified?: boolean;
+  lastChecked?: string;
   lat: number;
   lng: number;
 };

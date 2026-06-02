@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="24" fill="#0f4c81" />
-  <path d="M50 18c-11 0-20 9-20 20 0 12 20 36 20 36s20-24 20-36c0-11-9-20-20-20Zm0 28a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" fill="#f8fafc" />
-  <text x="50" y="90" font-size="12" text-anchor="middle" fill="#f59e0b" font-family="sans-serif">UMEDA</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Umeda Survival Map icon">
+  <rect width="512" height="512" rx="88" fill="#0f4c81"/>
+  <path d="M256 72c-78 0-142 63-142 141 0 96 142 226 142 226s142-130 142-226c0-78-64-141-142-141z" fill="#f59e0b"/>
+  <circle cx="256" cy="216" r="54" fill="#f8fafc"/>
+  <path d="M164 386h184" stroke="#f8fafc" stroke-width="32" stroke-linecap="round"/>
+  <path d="M200 428h112" stroke="#f8fafc" stroke-width="24" stroke-linecap="round"/>
 </svg>

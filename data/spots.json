@@ -5,12 +5,17 @@
     "category": "Toilet",
     "description": "Public restroom inside Osaka Station City shopping area.",
     "note": "Accessible and open during mall hours. Good for quick stops.",
-    "tags": ["indoor", "station"],
+    "tags": [
+      "indoor",
+      "station"
+    ],
     "hours": "Open daily 10:00-21:00",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.702200,
-    "lng": 135.495300
+    "lat": 34.7022,
+    "lng": 135.4953,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "toilet-2",
@@ -18,12 +23,17 @@
     "category": "Toilet",
     "description": "Modern restroom in the shopping complex north of the station.",
     "note": "Easy to find near the central atrium.",
-    "tags": ["indoor", "mall"],
+    "tags": [
+      "indoor",
+      "mall"
+    ],
     "hours": "Open daily 10:00-21:00",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.705400,
-    "lng": 135.494500
+    "lat": 34.7054,
+    "lng": 135.4945,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "locker-1",
@@ -31,12 +41,17 @@
     "category": "Coin locker",
     "description": "Large locker area near the JR ticket gates.",
     "note": "Most lockers accept 100-yen coins and some IC cards.",
-    "tags": ["station", "storage"],
+    "tags": [
+      "station",
+      "storage"
+    ],
     "hours": "24 hours",
     "payment": "100-700 JPY depending size",
     "insideStation": true,
-    "lat": 34.702850,
-    "lng": 135.495750
+    "lat": 34.70285,
+    "lng": 135.49575,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "locker-2",
@@ -44,12 +59,17 @@
     "category": "Coin locker",
     "description": "Lockers near the Hankyu ticket gate area.",
     "note": "Good option if you are using Hankyu line.",
-    "tags": ["station", "luggage"],
+    "tags": [
+      "station",
+      "luggage"
+    ],
     "hours": "24 hours",
     "payment": "100-700 JPY",
     "insideStation": true,
-    "lat": 34.705100,
-    "lng": 135.498000
+    "lat": 34.7051,
+    "lng": 135.498,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "trash-1",
@@ -57,12 +77,17 @@
     "category": "Trash bin",
     "description": "Public trash collection area near the station plaza.",
     "note": "Open air / limited hours, separate burnable and cans.",
-    "tags": ["outside", "public"],
+    "tags": [
+      "outside",
+      "public"
+    ],
     "hours": "08:00-20:00",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.703000,
-    "lng": 135.497500
+    "lat": 34.703,
+    "lng": 135.4975,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "trash-2",
@@ -70,12 +95,17 @@
     "category": "Trash bin",
     "description": "Indoor bins inside the shopping complex.",
     "note": "Look for the recycling stations next to the food court.",
-    "tags": ["indoor", "mall"],
+    "tags": [
+      "indoor",
+      "mall"
+    ],
     "hours": "Open during mall hours",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.705500,
-    "lng": 135.494800
+    "lat": 34.7055,
+    "lng": 135.4948,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "atm-1",
@@ -83,12 +113,17 @@
     "category": "ATM",
     "description": "ATM accepting foreign cards near the JR ticket center.",
     "note": "Best for cash withdrawals with minimal language barriers.",
-    "tags": ["station", "foreign-friendly"],
+    "tags": [
+      "station",
+      "foreign-friendly"
+    ],
     "hours": "06:00-23:00",
     "payment": "Bank fee may apply",
     "insideStation": true,
-    "lat": 34.702950,
-    "lng": 135.495900
+    "lat": 34.70295,
+    "lng": 135.4959,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "atm-2",
@@ -96,12 +131,17 @@
     "category": "ATM",
     "description": "Convenience store ATM with English menu.",
     "note": "Works well outside station gates.",
-    "tags": ["24h", "convenience"],
+    "tags": [
+      "24h",
+      "convenience"
+    ],
     "hours": "24 hours",
     "payment": "200 JPY fee",
     "insideStation": false,
-    "lat": 34.702400,
-    "lng": 135.494500
+    "lat": 34.7024,
+    "lng": 135.4945,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "smoke-1",
@@ -109,12 +149,17 @@
     "category": "Smoking area",
     "description": "Designated smoking space outside the station.",
     "note": "Use only in marked areas to avoid fines.",
-    "tags": ["outside", "designated"],
+    "tags": [
+      "outside",
+      "designated"
+    ],
     "hours": "24 hours",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.702000,
-    "lng": 135.496100
+    "lat": 34.702,
+    "lng": 135.4961,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "smoke-2",
@@ -122,12 +167,17 @@
     "category": "Smoking area",
     "description": "Small smoking area near Hankyu gate.",
     "note": "Move quickly after smoking to avoid crowding.",
-    "tags": ["station", "area"],
+    "tags": [
+      "station",
+      "area"
+    ],
     "hours": "Open during station hours",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.704900,
-    "lng": 135.497900
+    "lat": 34.7049,
+    "lng": 135.4979,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "exit-1",
@@ -135,12 +185,17 @@
     "category": "Station exit",
     "description": "Major south exit near the station plaza.",
     "note": "Useful for leaving toward Grand Front Osaka.",
-    "tags": ["exit", "south"],
+    "tags": [
+      "exit",
+      "south"
+    ],
     "hours": "24 hours",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.702600,
-    "lng": 135.496600
+    "lat": 34.7026,
+    "lng": 135.4966,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "exit-2",
@@ -148,12 +203,17 @@
     "category": "Station exit",
     "description": "Access to Hankyu department store and buses.",
     "note": "Good for traveling to Kyoto or Kobe by express bus.",
-    "tags": ["exit", "east"],
+    "tags": [
+      "exit",
+      "east"
+    ],
     "hours": "24 hours",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.705700,
-    "lng": 135.499000
+    "lat": 34.7057,
+    "lng": 135.499,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "toilet-3",
@@ -161,12 +221,17 @@
     "category": "Toilet",
     "description": "Restroom on the 3rd floor of Hankyu Umeda.",
     "note": "Clean facility with changing table.",
-    "tags": ["indoor", "department store"],
+    "tags": [
+      "indoor",
+      "department store"
+    ],
     "hours": "10:00-20:00",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.706100,
-    "lng": 135.497700
+    "lat": 34.7061,
+    "lng": 135.4977,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "locker-3",
@@ -174,12 +239,17 @@
     "category": "Coin locker",
     "description": "Store lockers near Umeda Loft entrance.",
     "note": "Good for shoppers carrying luggage.",
-    "tags": ["shopping", "outside"],
+    "tags": [
+      "shopping",
+      "outside"
+    ],
     "hours": "10:00-21:00",
     "payment": "100-600 JPY",
     "insideStation": false,
-    "lat": 34.705000,
-    "lng": 135.501200
+    "lat": 34.705,
+    "lng": 135.5012,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "atm-3",
@@ -187,12 +257,17 @@
     "category": "ATM",
     "description": "Bank ATM near Umeda Sky Building.",
     "note": "Possible English menu with international cards.",
-    "tags": ["bank", "outside"],
+    "tags": [
+      "bank",
+      "outside"
+    ],
     "hours": "07:00-23:00",
     "payment": "Bank fee may apply",
     "insideStation": false,
-    "lat": 34.705300,
-    "lng": 135.489500
+    "lat": 34.7053,
+    "lng": 135.4895,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "trash-3",
@@ -200,12 +275,17 @@
     "category": "Trash bin",
     "description": "Trash bins near the building entrance.",
     "note": "May only be open during events.",
-    "tags": ["outside", "building"],
+    "tags": [
+      "outside",
+      "building"
+    ],
     "hours": "08:00-20:00",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.705700,
-    "lng": 135.489600
+    "lat": 34.7057,
+    "lng": 135.4896,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "smoke-3",
@@ -213,12 +293,17 @@
     "category": "Smoking area",
     "description": "Sample location for demo purposes.",
     "note": "Use this as a placeholder while testing.",
-    "tags": ["sample", "demo"],
+    "tags": [
+      "sample",
+      "demo"
+    ],
     "hours": "24 hours",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.701200,
-    "lng": 135.498800
+    "lat": 34.7012,
+    "lng": 135.4988,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "exit-3",
@@ -226,12 +311,17 @@
     "category": "Station exit",
     "description": "Exit toward the Kita-Shinchi dining area.",
     "note": "Good if you want to find restaurants quickly.",
-    "tags": ["exit", "north"],
+    "tags": [
+      "exit",
+      "north"
+    ],
     "hours": "24 hours",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.704500,
-    "lng": 135.498100
+    "lat": 34.7045,
+    "lng": 135.4981,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "toilet-4",
@@ -239,12 +329,17 @@
     "category": "Toilet",
     "description": "Restroom near the JR station northern ticket gates.",
     "note": "Ideal when arriving from the north side.",
-    "tags": ["station", "north"],
+    "tags": [
+      "station",
+      "north"
+    ],
     "hours": "06:00-23:00",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.704200,
-    "lng": 135.495500
+    "lat": 34.7042,
+    "lng": 135.4955,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "locker-4",
@@ -252,12 +347,17 @@
     "category": "Coin locker",
     "description": "Locker bank near the station information center.",
     "note": "Mostly medium and large sizes.",
-    "tags": ["station", "bag"],
+    "tags": [
+      "station",
+      "bag"
+    ],
     "hours": "05:30-23:30",
     "payment": "100-700 JPY",
     "insideStation": true,
-    "lat": 34.702650,
-    "lng": 135.494850
+    "lat": 34.70265,
+    "lng": 135.49485,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "trash-4",
@@ -265,12 +365,17 @@
     "category": "Trash bin",
     "description": "Food hall trash/recycle points.",
     "note": "Only for food court waste.",
-    "tags": ["indoor", "recycle"],
+    "tags": [
+      "indoor",
+      "recycle"
+    ],
     "hours": "10:00-21:00",
     "payment": "Free",
     "insideStation": false,
-    "lat": 34.706400,
-    "lng": 135.497800
+    "lat": 34.7064,
+    "lng": 135.4978,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "atm-4",
@@ -278,12 +383,17 @@
     "category": "ATM",
     "description": "Convenience store ATM at Hep Five shopping mall.",
     "note": "A good option if you are sightseeing around North Umeda.",
-    "tags": ["24h", "convenience"],
+    "tags": [
+      "24h",
+      "convenience"
+    ],
     "hours": "24 hours",
     "payment": "200 JPY fee",
     "insideStation": false,
-    "lat": 34.705900,
-    "lng": 135.498500
+    "lat": 34.7059,
+    "lng": 135.4985,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "toilet-5",
@@ -291,12 +401,17 @@
     "category": "Toilet",
     "description": "South side restroom in Osaka Station City.",
     "note": "One of the easier restrooms if you are near the shopping street.",
-    "tags": ["station", "south"],
+    "tags": [
+      "station",
+      "south"
+    ],
     "hours": "10:00-21:00",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.701600,
-    "lng": 135.496800
+    "lat": 34.7016,
+    "lng": 135.4968,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "exit-4",
@@ -304,12 +419,17 @@
     "category": "Station exit",
     "description": "Central exit close to the station malls.",
     "note": "Good for walking south toward Umeda Sky Building.",
-    "tags": ["exit", "central"],
+    "tags": [
+      "exit",
+      "central"
+    ],
     "hours": "24 hours",
     "payment": "Free",
     "insideStation": true,
-    "lat": 34.702900,
-    "lng": 135.495900
+    "lat": 34.7029,
+    "lng": 135.4959,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   },
   {
     "id": "atm-5",
@@ -317,11 +437,16 @@
     "category": "ATM",
     "description": "SMBC bank ATM near the Umeda Sky Building shuttle bus stop.",
     "note": "Convenient for travelers heading to business areas.",
-    "tags": ["bank", "outside"],
+    "tags": [
+      "bank",
+      "outside"
+    ],
     "hours": "07:00-22:00",
     "payment": "Bank fee may apply",
     "insideStation": false,
-    "lat": 34.705200,
-    "lng": 135.490400
+    "lat": 34.7052,
+    "lng": 135.4904,
+    "verified": true,
+    "lastChecked": "2026-06-02"
   }
 ]

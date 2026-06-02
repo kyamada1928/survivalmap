@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Umeda Survival Map icon">
+  <rect width="512" height="512" rx="96" fill="#0f4c81"/>
+  <circle cx="256" cy="256" r="184" fill="#f8fafc"/>
+  <path d="M256 96c-68 0-124 55-124 123 0 84 124 197 124 197s124-113 124-197c0-68-56-123-124-123z" fill="#f59e0b"/>
+  <circle cx="256" cy="220" r="48" fill="#0f4c81"/>
+  <path d="M176 342h160" stroke="#0f4c81" stroke-width="28" stroke-linecap="round"/>
+  <path d="M208 380h96" stroke="#0f4c81" stroke-width="22" stroke-linecap="round"/>
+</svg>

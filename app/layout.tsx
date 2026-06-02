@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: "Quick map for tourists around Umeda, Osaka.",
   icons: [
     { rel: "icon", url: "/icon.svg" },
+    { rel: "apple-touch-icon", url: "/icon-maskable.svg" },
   ],
 };
 
