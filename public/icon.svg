@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="24" fill="#0f4c81" />
+  <path d="M50 18c-11 0-20 9-20 20 0 12 20 36 20 36s20-24 20-36c0-11-9-20-20-20Zm0 28a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" fill="#f8fafc" />
+  <text x="50" y="90" font-size="12" text-anchor="middle" fill="#f59e0b" font-family="sans-serif">UMEDA</text>
+</svg>
